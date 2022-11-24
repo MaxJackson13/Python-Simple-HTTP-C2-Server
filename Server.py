@@ -4,7 +4,7 @@ from base64 import b64encode
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--host', required=True, help = 'Enter your IP address')
+parser.add_argument('-s', '--serverip', required=True, help = 'Enter your IP address')
 parser.add_argument('-p', '--port', default=8000, type=int, help = 'Specify a port for the connection')
 options = parser.parse_args()
 
