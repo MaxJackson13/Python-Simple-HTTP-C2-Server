@@ -12,3 +12,8 @@ I was more interested in creating this to see what artifacts I could find on the
 Example
 -------
 <img src="images/example.png">
+
+Artifacts
+---------
+First the obvious
+`netstat -antp` and `ps auxf` show the listener on port 8000 and the python process
