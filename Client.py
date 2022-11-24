@@ -8,7 +8,7 @@ parser.add_argument('-s', '--serverip', required=True, help='Enter the server IP
 parser.add_argument('-p', '--port', default=8000, help='Specify the port to connect on')
 options = parser.parse_args()
 
-ip = options.client
+ip = options.serverip
 port = options.port
 
 class C2(cmd.Cmd):
