@@ -11,3 +11,4 @@ I was more interested in creating this to see what artifacts I could find on the
 
 Example
 -------
+<img src="images/example.png">
