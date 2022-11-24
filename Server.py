@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--serverip', required=True, help = 'Enter your IP address')
-parser.add_argument('-p', '--port', default=8000, type=int, help = 'Specify a port for the connection')
+parser.add_argument('-p', '--port', default=8000, type=int, help = 'Specify the port to serve on')
 options = parser.parse_args()
 
 host = options.host
