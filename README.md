@@ -23,8 +23,6 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 
 <img src="images/basicinfo.png">
 
-That's nice, but I want to see what the attacker has done since they've compromised the box. I'll check out `/proc/563921/maps`
-
 I'll fire up wireshark to capture a request and response between the client and server. I've just entered the `id` command at the client's prompt.
 
 <img src="images/request.png" width=750>
@@ -50,6 +48,13 @@ Ok but I want to see what evidence I can find left behind on the filesystem. I k
 
 We can see the process was launched with the commandline `python3 server.py -s 192.168.155.129` from the `/home/kali/` directory.
 
-That's nice but I want to see what the attacker has done since they've compromised the box. I'll looks into `/proc/593/maps`
+That's nice but I want to see what the attacker has done since they've compromised the box. `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries called by the process and anything the process writes into memory. Each row contains the fields
+
+```
+address           perms offset  dev   inode   pathname
+08048000-08056000 r-xp 00000000 03:0c 64593   /usr/sbin/gpm
+```
+
+I'll look into `/proc/593921/maps`. 
 
 <img src="images/maps.png">
