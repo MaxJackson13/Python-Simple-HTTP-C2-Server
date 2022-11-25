@@ -59,13 +59,21 @@ That's nice but I want to see what the attacker has done since they've compromis
 - `--forest` shows the subprocesses spawned from a parent process
 - `grep -i python -A5 -B5` filters for processes spawned by python and shows 5 lines above and below
 
-This won't catch the subprocess however as it's being spawned, executing and exiting in well under the 1 second interval `watch` is configured to refresh on.
+This won't catch the subprocess however as it's being spawned, executing and exiting in well under the 1 second interval `watch` is refreshing on.
+
+<img src="images/watch.png">
 
 I have another idea though. I know that every process gets a subdirectory in `/proc` based on its `pid`. Maybe I can catch this subdirectory and list the contents before it gets removed. For this I'll use the following command
 
-`
+`pid=$(ps auxf | grep server.py | grep -v grep | awk '{print$2}'); while true; do subpid=$(pgrep -P $pid) && ls -la /proc/$subpid/ && echo ''; done`
 
-<img src="images/watch.png">
+The first bit inside the `$()` just greps out the `pid` of the parent process from the output of `ps`
+`pgrep -P $pid` matches all processes whose ppid is the `server.py` process, so it'll catch the pid of the `subprocess.Popen` process
+`&& la -ls /proc/$subpid` says if the preceeding command executes sucessfully, list the contents of this subprocess' subdirectory in `/proc`
+
+<img src="images/processpid.png">
+
+It take a few tries to win the race condition of catching the directory before it's removed but it works!
 
 `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries loaded by the process and anything the process writes into memory. Each row contains the fields
 
