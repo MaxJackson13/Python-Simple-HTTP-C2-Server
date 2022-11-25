@@ -25,12 +25,14 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 
 I'll fire up wireshark to capture a request and response between the client and server. I've just entered the `id` command at the client's prompt.
 
-Client's request
 <img src="images/request.png" width=750>
+
+Client's request
+
+<img src="images/response.png" width=750>
 
 Server's response
 
-<img src="images/response.png" width=750>
 
 I can immediately pick out the base64 encoded `id` command in the client's cookie and the long base64 encoded response in the server's `set-cookie` header. This feels like cheating though because wireshark is OP but also because I know what to look for. 
 
