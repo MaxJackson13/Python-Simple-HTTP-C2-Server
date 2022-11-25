@@ -25,14 +25,14 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 
 I'll fire up wireshark to capture a request and response between the client and server. I've just entered the `id` command at the client's prompt.
 
-<img src="images/request.png" width=750>
-
 Client's request
-<img src="images/response.png" width=750>
+<img src="images/request.png" width=750>
 
 Server's response
 
-I can immediately pick out the base64 encoded `id` command in the client's cookie and the long base64 encoded response in the server's 'set-cookie' header. This feels like cheating though because wireshark is OP but also because I know what to look for. 
+<img src="images/response.png" width=750>
+
+I can immediately pick out the base64 encoded `id` command in the client's cookie and the long base64 encoded response in the server's `set-cookie` header. This feels like cheating though because wireshark is OP but also because I know what to look for. 
 
 So how would you detect this is if you didn't know what's going on? A realistic scenario is an enterprise has a baseline of known normal. They know from past data what ip's people are commonly connecting out to, how often, at what times etc. So when a connection is made to an unknown ip for the first time, and especially when the traffic has user agents like `python-requests 2.24.0` and `BaseHTTP/0.6 Python/3.10.7`, this is stuff that could be alerted on.
 
