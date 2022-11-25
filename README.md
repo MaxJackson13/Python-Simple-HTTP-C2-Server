@@ -1,4 +1,4 @@
-Description
+Wait What?..
 -----------
 
 Have you ever wanted to over complicate remote code execution? Me neither.  
@@ -13,6 +13,7 @@ Example
 -------
 <img src="images/example.png">
 
+In the left windows is the client and the right is the server. The client executes the command `id` and receives the result from the server.
 Artifacts
 ---------
 First the obvious
