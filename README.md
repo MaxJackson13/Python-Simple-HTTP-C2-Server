@@ -13,7 +13,7 @@ Example
 -------
 <img src="images/example.png">
 
-In the left window is the client, a kali Linux VM with eth0 ip address 192.168.155.129. The right side is the server, my macOS host with eth0 ip address 192.168.0.8. The client executes the command `id` and receives the result from the server.
+In the left window is the client, a kali Linux VM with `eth0` ip address `192.168.155.129`. The right side is the server, my macOS host with `eth0` ip address `192.168.0.8`. The client executes the command `id` and receives the result from the server.
 
 Artifacts
 ---------
@@ -21,4 +21,4 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 
 `netstat -antp` and `ps auxf` show the listener on port `8000` and the process associated with the instance of server.py. That's fine but python scripts run all the time and hosts commonly listen on ports like `8000` so what?
 
-<img src="images/netstat.png">
+<img src="images/basicinfo.png">
