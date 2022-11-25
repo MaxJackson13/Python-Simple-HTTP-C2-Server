@@ -97,19 +97,19 @@ I'll change the command from doing `ls -la /proc/$subpid` to `cat /proc/$subpid/
 Memory Foreniscs
 ----------------
 
-`/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries loaded by the process and anything the process writes into memory. Each row contains the fields
+`/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains a map of the shared objects/libraries loaded by the process and the locations where the process writes to. Each row contains the fields
 
 ```
 address           perms offset  dev   inode   pathname
 08048000-08056000 r-xp 00000000 03:0c 64593   /usr/sbin/gpm
 ```
 
-I'll checkout `/proc/593921/maps`. 
-
-<img src="images/maps.png">
-
 I know that the result of the commands the attacker is sending is being written to memory. The stack is structured but the heap is for dynamically allocating unstructured data, and the results of an arbitrary command the attacker sends are both dynamic in nature (don't know when the command will come through) and unstructured (who knows what/how long the output will be). So I'd like to check out the heap.
 
 <img src="images/heap.png">
 
+This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I can use `dd` to read from the heap. `dd` is a command line utility to convert and copy files. I'll run the command
 
+`dd if=/proc/888264/maps bs=1 skip=$((0x5640c2bac000)) count=$(($((0x5640c2de1000))-$((0x5640c2bac000))))`
+
+this means read from /proc/88264/maps with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap)
