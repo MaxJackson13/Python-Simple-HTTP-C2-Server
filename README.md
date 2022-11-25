@@ -48,13 +48,24 @@ Ok but I want to see what evidence I can find left behind on the filesystem. I k
 
 We can see the process was launched with the commandline `python3 server.py -s 192.168.155.129` from the `/home/kali/` directory.
 
-That's nice but I want to see what the attacker has done since they've compromised the box. `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries called by the process and anything the process writes into memory. Each row contains the fields
+That's nice but I want to see what the attacker has done since they've compromised the box. I know that the `server.py` process is spawning a subprocess to execute the command supplied in the cookie using `subprocess.Popen` so I wonder if I can catch this process before it exits. I could try 
+
+`watch -n 1 'ps -eo cmd --forest | grep -i python -A5 -B5'`
+
+- `watch -n 1` executes the proceeding command, refreshing on 1 second intervals
+- `ps -eo cmd` shows the absolute path to the executable that spawned the process and associated command line arguments
+- `--forest` shows the subprocesses spawned from a parent process
+- `grep -i python -A5 -B5` filters for processes spawned by python and shows 5 lines above and below
+
+<img src="images/watch.png">
+
+`/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries loaded by the process and anything the process writes into memory. Each row contains the fields
 
 ```
 address           perms offset  dev   inode   pathname
 08048000-08056000 r-xp 00000000 03:0c 64593   /usr/sbin/gpm
 ```
 
-I'll look into `/proc/593921/maps`. 
+I'll checkout `/proc/593921/maps`. 
 
 <img src="images/maps.png">
