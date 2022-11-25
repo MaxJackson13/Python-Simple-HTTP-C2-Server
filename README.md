@@ -1,4 +1,4 @@
-Wait What?..
+Wait Why?..
 -----------
 
 Have you ever wanted to over complicate remote code execution? Me neither.  
@@ -17,7 +17,7 @@ In the left window is the client, a kali Linux VM with `eth0` ip address `192.16
 
 Artifacts
 ---------
-I'll run the server on my linux box and the client on my mac for this as I'd rather be on the linux terminal than the mac to be honest. I'll kick off the server with the command line `python3 server.py -s 192.168.0.8 >& /dev/null &`. The `>& /dev/null` redirects standard error and standard out to `/dev/null` so it won't show those `192.168.155.1 - - [25/Nov/2022 07:03:14] "GET / HTTP/1.1" 200 -` messages, and the final `&` will execute the program in the background so I can continue to use the terminal. First the obvious
+I'll run the server on my linux box and the client on my mac for this as I'd rather be on the linux terminal than the mac to be honest. I'll kick off the server with the command line `python3 server.py -s 192.168.155.129 >& /dev/null &`. The `>& /dev/null` redirects standard error and standard out to `/dev/null` so it won't show those `192.168.155.1 - - [25/Nov/2022 07:03:14] "GET / HTTP/1.1" 200 -` messages, and the final `&` will execute the program in the background so I can continue to use the terminal. First the obvious
 
 `netstat -antp` and `ps auxf` show the listener on port `8000` and the process associated with the instance of server.py. That's fine but python scripts run all the time and hosts commonly listen on ports like `8000` so what?
 
@@ -42,7 +42,7 @@ It's unrealistic for enterprises to hold full pcaps for any useful length of tim
 Netflow would also be handy here as it would allow you to pick up on the inital and to log subsequent connections to the foreign ip, but since netflow is only metadata on network traffic, you couldn't 'look inside' the packets and catch the stuff like the suspicious user agent or decode the cookies to follow the conversation between the client and server.
 
 ps and /proc
---
+------------
 
 Ok but I want to see what evidence I can find left behind on the filesystem. I know the PID  of this python process is `563921` from the output of `ps`. The `/proc` volume is a virtual filesystem created at boot that contains a subdirectory for each running process, labelled by PID. Each subdirectory contains valuable information about the running process. `/proc/563921/cmdline` contains the command typed in the shell used to launch the process, and `/proc/self/environ` lists the environment variables associated with the user who executed that process. 
 
@@ -50,7 +50,7 @@ Ok but I want to see what evidence I can find left behind on the filesystem. I k
 
 We can see the process was launched with the commandline `python3 server.py -s 192.168.155.129` from the `/home/kali/` directory.
 
-That's nice but I want to see what the attacker has done since they've compromised the box. I know that the `server.py` process is spawning a subprocess to execute the command supplied in the cookie using `subprocess.Popen` so I wonder if I can catch this process before it exits. I could try 
+That's nice but I want to see what the attacker has done since they've compromised the box or catch them in the act. I know that the `server.py` process is spawning a subprocess to execute the command supplied in the cookie using `subprocess.Popen` so I wonder if I can catch this process before it exits. I could try 
 
 `watch -n 1 'ps -eo cmd --forest | grep -i python -A5 -B5'`
 
@@ -74,6 +74,24 @@ The first bit inside the `$()` just greps out the `pid` of the parent process fr
 <img src="images/processpid.png">
 
 It take a few tries to win the race condition of catching the directory before it's removed but it works!
+
+I'll cheat here a bit for the purposes of demonstration. I'll modify the `client.py` code to suspend the process for a split second so I can reliably win the race condition. I made the following changes; what was:
+
+`subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate[0]`
+
+is now 
+```
+P = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+process = psutil.Process(pid=P.pid)
+process.suspend()
+time.sleep(0.1)
+process.resume()
+output = P.communicate()[0]
+```
+
+
+
+
 
 `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries loaded by the process and anything the process writes into memory. Each row contains the fields
 
