@@ -90,10 +90,12 @@ output = P.communicate()[0]
 ```
 all this does is create a new process to execute `command`, get a handle on the process represented by `P`, suspend its execution, wait 0.1 seconds, resume its execution and grab stdout once the process has executed.
 
-I'll change the command from doing `ls -la /proc/$subpid` to `cat /proc/$subpid/cmdline` and we get the results!
+I'll change the command from doing `ls -la /proc/$subpid` to `cat /proc/$subpid/cmdline` and we get the results. We can see that attacker execute the `id` command.
 
 <img src="images/paused.png">
 
+Memory Foreniscs
+---------------------
 
 `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries loaded by the process and anything the process writes into memory. Each row contains the fields
 
@@ -105,4 +107,6 @@ address           perms offset  dev   inode   pathname
 I'll checkout `/proc/593921/maps`. 
 
 <img src="images/maps.png">
-`
+
+I know that the result of the commands the attacker is sending is being written to memory. The stack is structured but the heap is for dynamically allocating unstructured data, and the results of an arbitrary command the attacker sends are both dynamic in nature (don't know when the command will come through) and unstructured (who knows what/how long the output will be). So I'd like to check out the heap.
+
