@@ -24,6 +24,7 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 <img src="images/basicinfo.png">
 
 I'll fire up wireshark to capture a request and response between the client and server. I've just entered the `id` command at the `client's prompt.
-<img src="images/request.png" width=400>
-<img src="images/response.png" widht=400>
+
+<img src="images/request.png" width=500>
+<img src="images/response.png" width=500>
 
