@@ -23,6 +23,8 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 
 <img src="images/basicinfo.png">
 
+That's nice, but I want to see what the attacker has done since they've compromised the box. I'll check out `/proc/563921/maps`
+
 I'll fire up wireshark to capture a request and response between the client and server. I've just entered the `id` command at the client's prompt.
 
 <img src="images/request.png" width=750>
@@ -46,4 +48,8 @@ Ok but I want to see what evidence I can find left behind on the filesystem. I k
 
 <img src="images/proc.png">
 
-We can see the process was launched with `python3 server.py -s 192.168.155.129` from the `/home/kali/` directory
+We can see the process was launched with the commandline `python3 server.py -s 192.168.155.129` from the `/home/kali/` directory.
+
+That's nice but I want to see what the attacker has done since they've compromised the box. I'll looks into `/proc/593/maps`
+
+<img src="images/maps.png">
