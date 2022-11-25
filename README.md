@@ -1,7 +1,7 @@
 Description
 -----------
 
-Have you ever wanted to over complicate remote code execution? Me neither. But now you can.  
+Have you ever wanted to over complicate remote code execution? Me neither.  
 
 `Server.py` will listen on a user specified port (default 8000) for HTTP GET requests with a base64 encoded cookie containing a command to run on the remote machine. It uses `subprocess.Popen` to spawn a new process, execute the command, and retrieve the results, separate from the process the server is running in before returning the results base64 encoded in the `Set-Cookie` response header.  
 
