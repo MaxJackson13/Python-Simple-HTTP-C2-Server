@@ -13,9 +13,12 @@ Example
 -------
 <img src="images/example.png">
 
-In the left windows is the client and the right is the server. The client executes the command `id` and receives the result from the server.
+In the left window is the client, a kali Linux VM with eth0 ip address 192.168.155.129. The right side is the server, my macOS host with eth0 ip address 192.168.0.8. The client executes the command `id` and receives the result from the server.
 
 Artifacts
 ---------
+I'll run the server on my linux box and the client on my mac for this as I'd rather be on the linux terminal than the mac to be honest.
 First the obvious
-`netstat -antp` and `ps auxf` show the listener on port 8000 and the python process
+`netstat -antp` and `ps auxf` show the listener on port 8000 and the process associated with the instance of server.py. That's fine but python scripts run all the time and host commonly listen on ports like 8000 so who's to say anything bad's going on.
+
+<img src="images/netstat.png">
