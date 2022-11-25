@@ -67,17 +67,17 @@ I have another idea though. I know that every process gets a subdirectory in `/p
 
 `pid=$(ps auxf | grep server.py | grep -v grep | awk '{print$2}'); while true; do subpid=$(pgrep -P $pid) && ls -la /proc/$subpid/ && echo ''; done`
 
-The first bit inside the `$()` just greps out the `pid` of the parent process from the output of `ps`
-`pgrep -P $pid` matches all processes whose ppid is the `server.py` process, so it'll catch the pid of the `subprocess.Popen` process
-`&& la -ls /proc/$subpid` says if the preceeding command executes sucessfully, list the contents of this subprocess' subdirectory in `/proc`
+1. The first bit inside the `$()` just greps out the `pid` of the parent process from the output of `ps`
+2. `pgrep -P $pid` matches all processes whose ppid is the `server.py` process, so it'll catch the pid of the `subprocess.Popen` process
+3. `&& la -ls /proc/$subpid` says if the preceeding command executes sucessfully, list the contents of this subprocess' subdirectory in `/proc`
 
 <img src="images/processcatch.png">
 
 It take a few tries to win the race condition of catching the directory before it's removed but it works!
 
-I'll cheat here a bit for the purposes of demonstration. I'll modify the `client.py` code to suspend the process for a split second so I can reliably win the race condition. I made the following changes; what was:
+I'll cheat here a bit for the purposes of demonstration. I'll modify the `client.py` code to suspend the process for a split second so I can reliably win the race condition. I imported the `psutil` and `time` libraries and made the following changes. What was:
 
-`subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate[0]`
+`output = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate[0]`
 
 is now 
 ```
@@ -88,9 +88,11 @@ time.sleep(0.1)
 process.resume()
 output = P.communicate()[0]
 ```
+all this does is create a new process to execute `command`, get a handle on the process represented by `P`, suspend its execution, wait 0.1 seconds, resume its execution and grab stdout once the process has executed.
 
+I'll change the command from doing `ls -la /proc/$subpid` to `cat /proc/$subpid/cmdline` and we get the results!
 
-
+<img src="images/paused.png">
 
 
 `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains shared objects/libraries loaded by the process and anything the process writes into memory. Each row contains the fields
