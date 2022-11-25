@@ -45,3 +45,5 @@ Netflow would also be handy here as it would allow you to pick up on the inital 
 Ok but I want to see what evidence I can find left behind on the filesystem. I know the PID  of this python process is `563921` from the output of `ps`. The `/proc` volume is a virtual filesystem created at boot that contains a subdirectory for each running process, labelled by PID. Each subdirectory contains valuable information about the running process. `/proc/563921/cmdline` contains the command typed in the shell used to launch the process, and `/proc/self/environ` lists the environment variables associated with the user who executed that process. 
 
 <img src="images/proc.png">
+
+We can see the process was launched with `python3 server.py -s 192.168.155.129` from the `/home/kali/` directory
