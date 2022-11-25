@@ -22,3 +22,5 @@ I'll run the server on my linux box and the client on my mac for this as I'd rat
 `netstat -antp` and `ps auxf` show the listener on port `8000` and the process associated with the instance of server.py. That's fine but python scripts run all the time and hosts commonly listen on ports like `8000` so what?
 
 <img src="images/basicinfo.png">
+
+Enter full packet capture. This feels like cheating as 
