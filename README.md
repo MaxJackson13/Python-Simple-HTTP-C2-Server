@@ -42,4 +42,6 @@ It's unrealistic for enterprises to hold full pcaps for any useful length of tim
 
 Netflow would also be handy here as it would allow you to pick up on the inital and to log subsequent connections to the foreign ip, but since netflow is only metadata on network traffic, you couldn't 'look inside' the packets and catch the stuff like the suspicious user agent or decode the cookies to follow the conversation between the client and server.
 
-Ok but I want to see what evidence I can find left behind on the filesystem. The PID  of this python process is 
+Ok but I want to see what evidence I can find left behind on the filesystem. I know the PID  of this python process is `563921` from the output of `ps`. The `/proc` volume is a virtual filesystem created at boot that contains a subdirectory for each running process, labelled by PID. Each subdirectory contains valuable information about the running process. `/proc/563921/cmdline` contains the command typed in the shell used to launch the process, and `/proc/self/environ` lists the environment variables associated with the user who executed that process. 
+
+<img src="Images/proc.png">
