@@ -71,7 +71,7 @@ The first bit inside the `$()` just greps out the `pid` of the parent process fr
 `pgrep -P $pid` matches all processes whose ppid is the `server.py` process, so it'll catch the pid of the `subprocess.Popen` process
 `&& la -ls /proc/$subpid` says if the preceeding command executes sucessfully, list the contents of this subprocess' subdirectory in `/proc`
 
-<img src="images/processpid.png">
+<img src="images/processcatch.png">
 
 It take a few tries to win the race condition of catching the directory before it's removed but it works!
 
