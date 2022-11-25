@@ -42,3 +42,4 @@ It's unrealistic for enterprises to hold full pcaps for any useful length of tim
 
 Netflow would also be handy here as it would allow you to pick up on the inital and to log subsequent connections to the foreign ip, but since netflow is only metadata on network traffic, you couldn't 'look inside' the packets and catch the stuff like the suspicious user agent or decode the cookies to follow the conversation between the client and server.
 
+Ok but I want to see what evidence I can find left behind on the filesystem. The PID  of this python process is 
