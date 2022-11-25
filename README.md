@@ -17,8 +17,8 @@ In the left window is the client, a kali Linux VM with eth0 ip address 192.168.1
 
 Artifacts
 ---------
-I'll run the server on my linux box and the client on my mac for this as I'd rather be on the linux terminal than the mac to be honest.
-First the obvious
-`netstat -antp` and `ps auxf` show the listener on port 8000 and the process associated with the instance of server.py. That's fine but python scripts run all the time and host commonly listen on ports like 8000 so who's to say anything bad's going on.
+I'll run the server on my linux box and the client on my mac for this as I'd rather be on the linux terminal than the mac to be honest. i'll kick off the server with the command line `python3 server.py -s 192.168.0.8 >& /dev/null &`. The `>& /dev/null` redirects standard error and standard out to `/dev/null` so it won't show those `192.168.155.1 - - [25/Nov/2022 07:03:14] "GET / HTTP/1.1" 200 -` messages, and the final `&` will execute the program in the background so I can continue to use the terminal. First the obvious
+
+`netstat -antp` and `ps auxf` show the listener on port 8000 and the process associated with the instance of server.py. That's fine but python scripts run all the time and hosts commonly listen on ports like 8000 so what?
 
 <img src="images/netstat.png">
