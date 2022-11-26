@@ -106,7 +106,7 @@ address           perms offset  dev   inode   pathname
 
 I know that the result of the commands the attacker is sending is being written to memory. The stack is structured but the heap is for dynamically allocating unstructured data, and the results of an arbitrary command the attacker sends are both dynamic in nature (don't know when the command will come through) and unstructured (who knows what/how long the output will be). So I'd like to check out the heap.
 
-<img src="images/heap.png">
+<img src="images/maps-heap.png">
 
 This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I can use `dd` to read from the heap. `dd` is a command line utility to convert and copy files. I'll run the command
 
@@ -115,4 +115,5 @@ This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I ca
 this means read from /proc/888264/maps with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
 
 <img src="images/set-cookie.png">
+<img src="images/heap.png">
 
