@@ -1,13 +1,13 @@
-Wait Why?..
+Wait Why Would You Make This?
 -----------
 
 Have you ever wanted to over complicate remote code execution? Me neither.  
 
+I was more interested in creating this to see what artifacts I could find on the victim machine (the one running server.py) to indicate there was an HTTP connection being used to transfer data to a remote attacker (me).
+
 `Server.py` will listen on a user specified port (default `8000`) for HTTP GET requests with a base64 encoded cookie containing a command to run on the remote machine. It uses `subprocess.Popen` to spawn a new process, execute the command, and retrieve the results, separate from the process the server is running in before returning the results base64 encoded in the `Set-Cookie` response header.  
 
 `Client.py` uses the `requests` module to craft an HTTP GET request with the input command base64 encoded in the cookie header. It parses the response for the `Set-Cookie` header and outputs the decoded results to the terminal. `Client.py` uses the `cmd` module to provide a command interpreter then uses the `cmdloop` method to repeatedly issue a prompt.
-
-I was more interested in creating this to see what artifacts I could find on the victim machine (the one running server.py) to indicate there was an HTTP connection being used to transfer data to a remote attacker (me).
 
 Example
 -------
@@ -115,5 +115,11 @@ This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I ca
 this means read from /proc/888264/maps with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
 
 <img src="images/set-cookie.png">
+
+we can see the server's response including the baes64 encoded output of the command sent by the client in the `Set-Cookie`
+
 <img src="images/heap.png">
 
+we even get the cleartext output of the commands the attacker remotely executed.
+
+Awesome.
