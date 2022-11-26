@@ -110,6 +110,9 @@ I know that the result of the commands the attacker is sending is being written 
 
 This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I can use `dd` to read from the heap. `dd` is a command line utility to convert and copy files. I'll run the command
 
-`dd if=/proc/888264/maps bs=1 skip=$((0x5640c2bac000)) count=$(($((0x5640c2de1000))-$((0x5640c2bac000))))`
+`dd if=/proc/888264/maps bs=1 skip=$((0x5640c2bac000)) count=$(($((0x5640c2de1000))-$((0x5640c2bac000)))) of=/tmp/heap`
 
-this means read from /proc/88264/maps with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap)
+this means read from /proc/888264/maps with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
+
+<img src="images/set-cookie.png">
+
