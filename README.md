@@ -1,3 +1,5 @@
+# Summary
+
 Wait Why Would You Make This?
 -----------
 
@@ -15,7 +17,7 @@ Example
 
 In the left window is the client, a kali Linux VM with `eth0` ip address `192.168.155.129`. The right side is the server, my macOS host with `eth0` ip address `192.168.0.8`. The client executes the command `id` and receives the result from the server.
 
-Artifacts
+Network Artifacts
 ---------
 I'll run the server on my linux box and the client on my mac for this as I'd rather be on the linux terminal than the mac to be honest. I'll kick off the server with the command line `python3 server.py -s 192.168.155.129 >& /dev/null &`. The `>& /dev/null` redirects standard error and standard out to `/dev/null` so it won't show those `192.168.155.1 - - [25/Nov/2022 07:03:14] "GET / HTTP/1.1" 200 -` messages, and the final `&` will execute the program in the background so I can continue to use the terminal. First the obvious
 
