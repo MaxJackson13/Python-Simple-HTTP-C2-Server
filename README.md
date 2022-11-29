@@ -1,5 +1,11 @@
 # Summary
+<details open>
+<summary> </summary>
 
+* [Why](#wait-why-would-you-make-this)
+  
+<details>
+  
 Wait Why Would You Make This?
 -----------
 
