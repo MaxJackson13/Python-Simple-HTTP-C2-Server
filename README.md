@@ -1,9 +1,14 @@
 # Summary
+
 <details open>
 <summary> </summary>
 
 * [Why](#wait-why-would-you-make-this)
-  
+* [Example](#example)
+* [Network Artifacts](#network-artifacts)
+* [ps and /proc](#ps-and-/proc)
+* [Memory Forensics](#memory-forensics)
+ 
 </details>
   
 Wait Why Would You Make This?
