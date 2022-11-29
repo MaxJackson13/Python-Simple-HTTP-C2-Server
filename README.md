@@ -6,7 +6,7 @@
 * [Why](#wait-why-would-you-make-this)
 * [Example](#example)
 * [Network Artifacts](#network-artifacts)
-* [ps and /proc](#ps-and-/proc)
+* [ps and /proc](#ps-and-proc)
 * [Memory Forensics](#memory-forensics)
  
 </details>
@@ -107,7 +107,7 @@ I'll change the command from doing `ls -la /proc/$subpid` to `cat /proc/$subpid/
 
 <img src="images/paused.png">
 
-Memory Foreniscs
+Memory Forensics
 ----------------
 
 `/proc/<pid>/maps` describes a region of contiguous virtual memory in a process or thread. So it contains a map of the shared objects/libraries loaded by the process and the locations where the process writes to. Each row contains the fields
