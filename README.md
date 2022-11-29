@@ -4,7 +4,7 @@
 
 * [Why](#wait-why-would-you-make-this)
   
-<details>
+</details>
   
 Wait Why Would You Make This?
 -----------
