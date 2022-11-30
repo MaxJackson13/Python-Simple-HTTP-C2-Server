@@ -59,9 +59,11 @@ Logs and Auditd
 ---------------
 
 Unfortunately the native Linux logs don't offer much in the way of detecting the command execution and subsequent exfiltration of the output. However there's a fantastic logging utility provided by RedHat:
+
 ```
 "The Linux Audit system provides a way to track security-relevant information on your system. Based on pre-configured rules, Audit generates log entries to record as much information about the events that are happening on your system as possible."
 ```
+
 Audit can 
 * watch over files/directories for r/w/x/a access
 * monitor syscalls
