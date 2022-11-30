@@ -6,6 +6,7 @@
 * [Why?](#wait-why-would-you-make-this)
 * [Example](#example)
 * [Network Artifacts](#network-artifacts)
+* [Logs and Auditd](#logs-and-auditd)
 * [ps and /proc](#ps-and-proc)
 * [Memory Forensics](#memory-forensics)
  
@@ -53,6 +54,32 @@ So how would you detect this is if you didn't know what's going on? A realistic 
 It's unrealistic for enterprises to hold full pcaps for any useful length of time, plus pcaps aren't too easy to parse. What we (and SIEMs) like are logs. Zeek is a great tool that can turn packet captures into protocol based logs, i.e. HTTP logs, DNS logs, TLS logs etc. You can forward some or all of these logs to a SIEM and write detection rules to alert on the stuff like the first time an unknown host was resolved in the DNS log, or user agents containing `python` in the http log. 
 
 Netflow would also be handy here as it would allow you to pick up on the inital and to log subsequent connections to the foreign ip, but since netflow is only metadata on network traffic, you couldn't 'look inside' the packets and catch the stuff like the suspicious user agent or decode the cookies to follow the conversation between the client and server.
+
+Logs and Auditd
+---------------
+
+Unfortunately the native Linux logs don't offer much in the way of detecting the command execution and subsequent exfiltration of the output. However there's a fantastic logging utility provided by RedHat:
+```
+"The Linux Audit system provides a way to track security-relevant information on your system. Based on pre-configured rules, Audit generates log entries to record as much information about the events that are happening on your system as possible."
+```
+Audit can 
+* watch over files/directories for r/w/x/a access
+* monitor syscalls
+* record user command lines
+* record security events such as failed logins
+and I'm sure much more.
+
+For my purposes I'll run a bare install of Audit and just supply my rules to `auditctl` on the commandline. Usually you'd collate all your rules in `/etc/audit/audit.rules`. Now I need to think what rule would flag how my script executes commands on the victim. I know it's using `subprocess.Popen` to spawn a child process so there'll be a fork syscall somewhere. Going to the <a href="https://docs.python.org/3/library/subprocess.html>subprocess documentation</a> I find they use the `vfork` syscall to improve performance as with `vfork` the child process shares the parents address space rather than getting its own identical copy. So I'll include the `vfork` in my rule. `subprocess` also uses `/bin/sh -c` to execute the shell command, which on my system is symlinked to `/usr/bin/dash` so I'll flag on `dash` being executed. I also want to check the syscall comes from a process belonging to the user owning the parent process so I'll use the checks `auid=1000, auid!=-1, uid!=0, uid=1000`. The `uid!=0` excludes anything coming from `sudo` and `auid!=1` excludes users whose login ID is not set. Lastly I'll add `-k fork` to add a tag `fork` to events matching the rule.
+
+All together after running `sudo service start auditd` I'll run
+
+`auditctl -a always,exit -F arch=b64 -S vfork -F exe=/usr/bin/dash -F auid=1000 -F auid!=-1 -F uid=1000 -F uid!=0 -k fork`
+
+to add the rule. I'll run some commands from the client then check the Audit logs with `ausearch -i -k fork`:
+
+<img src="images/audit.png">
+
+the output matches precisely the commands I executed just prior on the client
 
 ps and /proc
 ------------
