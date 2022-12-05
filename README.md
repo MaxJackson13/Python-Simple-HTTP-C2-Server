@@ -156,7 +156,7 @@ This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I ca
 
 `dd if=/proc/888264/mem bs=1 skip=$((0x5640c2bac000)) count=$(($((0x5640c2de1000))-$((0x5640c2bac000)))) of=/tmp/heap`
 
-(I restartedt the server so the pid changed). This means read from /proc/888264/mem with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
+(I restarted the server so the pid changed to 888264). This means read from /proc/888264/mem with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
 
 <img src="images/set-cookie.png">
 
