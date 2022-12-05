@@ -88,7 +88,7 @@ the output matches precisely the commands I executed just prior on the client
 ps and /proc
 ------------
 
-Ok but I want to see what evidence I can find left behind on the filesystem. I know the PID  of this python process is `563921` from the output of `ps`. The `/proc` volume is a virtual filesystem created at boot that contains a subdirectory for each running process, labelled by PID. Each subdirectory contains valuable information about the running process. `/proc/563921/cmdline` contains the command typed in the shell used to launch the process, and `/proc/self/environ` lists the environment variables associated with the user who executed that process. 
+Ok but I want to see what evidence I can find left behind on the filesystem. I know the PID  of this python process is `563921` from the output of `ps`. The `/proc` volume is a virtual filesystem created at boot that contains a subdirectory for each running process, labelled by PID. Each subdirectory contains valuable information about the running process. `/proc/563921/cmdline` contains the command typed in the shell used to launch the process, and `/proc/563921/environ` lists the environment variables associated with the user who executed that process. 
 
 <img src="images/proc.png">
 
@@ -154,13 +154,13 @@ I know that the result of the commands the attacker is sending is being written 
 
 This tells me the heap starts at 0x5640c2bac000 and ends at 0x5640c2de1000. I can use `dd` to read from the heap. `dd` is a command line utility to convert and copy files. I'll run the command
 
-`dd if=/proc/888264/maps bs=1 skip=$((0x5640c2bac000)) count=$(($((0x5640c2de1000))-$((0x5640c2bac000)))) of=/tmp/heap`
+`dd if=/proc/888264/mem bs=1 skip=$((0x5640c2bac000)) count=$(($((0x5640c2de1000))-$((0x5640c2bac000)))) of=/tmp/heap`
 
-this means read from /proc/888264/maps with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
+(I restartedt the server so the pid changed). This means read from /proc/888264/mem with a block size of 1 byte, starting at address 0x5640c2bac000 for 2314240 bytes (up until the end of the heap) and save the output to `/tmp/heap`
 
 <img src="images/set-cookie.png">
 
-we can see the server's response including the baes64 encoded output of the command sent by the client in the `Set-Cookie`
+we can see the server's response including the base64 encoded output of the command sent by the client in the `Set-Cookie`
 
 <img src="images/heap.png">
 
