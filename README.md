@@ -66,12 +66,12 @@ Based on pre-configured rules, Audit generates log entries to record as much inf
 the events that are happening on your system as possible."
 ```
 Audit can 
-* watch over files/directories for r/w/x/a access
-* monitor syscalls
-* record user command lines
-* record security events such as failed logins
+* Watch over files/directories for r/w/x/a access
+* Monitor syscalls
+* Record user command lines
+* Record security events such as failed logins
 
-and I'm sure much more.
+and much more.
 
 For my purposes I'll run a bare install of Audit and just supply my rules to `auditctl` on the commandline. Usually you'd collate all your rules in `/etc/audit/audit.rules`. Now I need to think what rule would flag how my script executes commands on the victim. I know it's using `subprocess.Popen` to spawn a child process so there'll be a fork syscall somewhere. Going to the <a href="https://docs.python.org/3/library/subprocess.html">subprocess documentation</a> I find they use the `vfork` syscall to improve performance as with `vfork` the child process shares the parents address space rather than getting its own identical copy. So I'll include `vfork` in my rule. `subprocess` also uses `/bin/sh -c` to execute the shell command, which on my system is symlinked to `/usr/bin/dash` so I'll flag on `dash` being executed. I also want to check the syscall comes from a process belonging to the user owning the parent process so I'll use the checks `auid=1000, auid!=-1, uid!=0, uid=1000`. The `uid!=0` excludes anything coming from `sudo` and `auid!=1` excludes users whose login ID is not set. Lastly I'll add `-k fork` to add a tag `fork` to events matching the rule.
 
