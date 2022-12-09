@@ -3,7 +3,7 @@
 <details open>
 <summary> </summary>
 
-* [Why?](#wait-why-would-you-make-this)
+* [Why?](#motivation)
 * [Example](#example)
 * [Network Artifacts](#network-artifacts)
 * [Logs and Auditd](#logs-and-auditd)
